@@ -2,8 +2,8 @@
 """
 Train a YOLOv5 classifier model on a classification dataset
 Datasets: --data mnist, fashion-mnist, cifar10, cifar100, imagenette, imagewoof, imagenet, or 'path/to/custom/dataset'
-YOLOv5-cls models: --model yolov5n-cls.pt, yolov5s-cls.pt, yolov5m-cls.pt, yolov5l-cls.pt, yolov5x-cls.pt
-Torchvision models: --model resnet50, efficientnet_b0, etc. See https://pytorch.org/vision/stable/models.html
+YOLOv5-cls yolov5_models: --model yolov5n-cls.pt, yolov5s-cls.pt, yolov5m-cls.pt, yolov5l-cls.pt, yolov5x-cls.pt
+Torchvision yolov5_models: --model resnet50, efficientnet_b0, etc. See https://pytorch.org/vision/stable/models.html
 
 Usage - Single-GPU and Multi-GPU DDP
     $ python classify/train.py --model yolov5s-cls.pt --data imagenette160 --epochs 5 --img 128
@@ -34,15 +34,15 @@ if str(ROOT) not in sys.path:
 ROOT = Path(os.path.relpath(ROOT, Path.cwd()))  # relative
 
 from classify import val as validate
-from models.experimental import attempt_load
-from models.yolo import ClassificationModel, DetectionModel
-from utils.dataloaders import create_classification_dataloader
-from utils.general import (DATASETS_DIR, LOGGER, WorkingDirectory, check_git_status, check_requirements, colorstr,
-                           download, increment_path, init_seeds, print_args, yaml_save)
-from utils.loggers import GenericLogger
-from utils.plots import imshow_cls
-from utils.torch_utils import (ModelEMA, model_info, reshape_classifier_output, select_device, smart_DDP,
-                               smart_optimizer, smartCrossEntropyLoss, torch_distributed_zero_first)
+from yolov5_models.experimental import attempt_load
+from yolov5_models.yolo import ClassificationModel, DetectionModel
+from yolov5_utils.dataloaders import create_classification_dataloader
+from yolov5_utils.general import (DATASETS_DIR, LOGGER, WorkingDirectory, check_git_status, check_requirements, colorstr,
+                                  download, increment_path, init_seeds, print_args, yaml_save)
+from yolov5_utils.loggers import GenericLogger
+from yolov5_utils.plots import imshow_cls
+from yolov5_utils.torch_utils import (ModelEMA, model_info, reshape_classifier_output, select_device, smart_DDP,
+                                      smart_optimizer, smartCrossEntropyLoss, torch_distributed_zero_first)
 
 LOCAL_RANK = int(os.getenv('LOCAL_RANK', -1))  # https://pytorch.org/docs/stable/elastic/run.html
 RANK = int(os.getenv('RANK', -1))
@@ -105,11 +105,11 @@ def train(opt, device):
     with torch_distributed_zero_first(LOCAL_RANK), WorkingDirectory(ROOT):
         if Path(opt.model).is_file() or opt.model.endswith('.pt'):
             model = attempt_load(opt.model, device='cpu', fuse=False)
-        elif opt.model in torchvision.models.__dict__:  # TorchVision models i.e. resnet50, efficientnet_b0
+        elif opt.model in torchvision.models.__dict__:  # TorchVision yolov5_models i.e. resnet50, efficientnet_b0
             model = torchvision.models.__dict__[opt.model](weights='IMAGENET1K_V1' if pretrained else None)
         else:
-            m = hub.list('ultralytics/yolov5')  # + hub.list('pytorch/vision')  # models
-            raise ModuleNotFoundError(f'--model {opt.model} not found. Available models are: \n' + '\n'.join(m))
+            m = hub.list('ultralytics/yolov5')  # + hub.list('pytorch/vision')  # yolov5_models
+            raise ModuleNotFoundError(f'--model {opt.model} not found. Available yolov5_models are: \n' + '\n'.join(m))
         if isinstance(model, DetectionModel):
             LOGGER.warning("WARNING: pass YOLOv5 classifier model with '-cls' suffix, i.e. '--model yolov5s-cls.pt'")
             model = ClassificationModel(model=model, nc=nc, cutoff=opt.cutoff or 10)  # convert to classification model

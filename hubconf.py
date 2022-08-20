@@ -1,6 +1,6 @@
 # YOLOv5 🚀 by Ultralytics, GPL-3.0 license
 """
-PyTorch Hub models https://pytorch.org/hub/ultralytics_yolov5/
+PyTorch Hub yolov5_models https://pytorch.org/hub/ultralytics_yolov5/
 
 Usage:
     import torch
@@ -28,12 +28,12 @@ def _create(name, pretrained=True, channels=3, classes=80, autoshape=True, verbo
     """
     from pathlib import Path
 
-    from models.common import AutoShape, DetectMultiBackend
-    from models.experimental import attempt_load
-    from models.yolo import DetectionModel
-    from utils.downloads import attempt_download
-    from utils.general import LOGGER, check_requirements, intersect_dicts, logging
-    from utils.torch_utils import select_device
+    from yolov5_models.common import AutoShape, DetectMultiBackend
+    from yolov5_models.experimental import attempt_load
+    from yolov5_models.yolo import DetectionModel
+    from yolov5_utils.downloads import attempt_download
+    from yolov5_utils.general import LOGGER, check_requirements, intersect_dicts, logging
+    from yolov5_utils.torch_utils import select_device
 
     if not verbose:
         LOGGER.setLevel(logging.WARNING)
@@ -50,7 +50,7 @@ def _create(name, pretrained=True, channels=3, classes=80, autoshape=True, verbo
             except Exception:
                 model = attempt_load(path, device=device, fuse=False)  # arbitrary model
         else:
-            cfg = list((Path(__file__).parent / 'models').rglob(f'{path.stem}.yaml'))[0]  # model.yaml path
+            cfg = list((Path(__file__).parent / 'yolov5_models').rglob(f'{path.stem}.yaml'))[0]  # model.yaml path
             model = DetectionModel(cfg, channels, classes)  # create model
             if pretrained:
                 ckpt = torch.load(attempt_download(path), map_location=device)  # load
@@ -131,7 +131,7 @@ if __name__ == '__main__':
     import numpy as np
     from PIL import Image
 
-    from utils.general import cv2, print_args
+    from yolov5_utils.general import cv2, print_args
 
     # Argparser
     parser = argparse.ArgumentParser()

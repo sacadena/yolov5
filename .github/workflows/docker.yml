@@ -33,7 +33,7 @@ jobs:
         with:
           context: .
           platforms: linux/arm64
-          file: utils/docker/Dockerfile-arm64
+          file: yolov5_utils/docker/Dockerfile-arm64
           push: true
           tags: ultralytics/yolov5:latest-arm64
 
@@ -41,7 +41,7 @@ jobs:
         uses: docker/build-push-action@v3
         with:
           context: .
-          file: utils/docker/Dockerfile-cpu
+          file: yolov5_utils/docker/Dockerfile-cpu
           push: true
           tags: ultralytics/yolov5:latest-cpu
 
@@ -49,6 +49,6 @@ jobs:
         uses: docker/build-push-action@v3
         with:
           context: .
-          file: utils/docker/Dockerfile
+          file: yolov5_utils/docker/Dockerfile
           push: true
           tags: ultralytics/yolov5:latest

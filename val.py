@@ -34,15 +34,15 @@ if str(ROOT) not in sys.path:
     sys.path.append(str(ROOT))  # add ROOT to PATH
 ROOT = Path(os.path.relpath(ROOT, Path.cwd()))  # relative
 
-from models.common import DetectMultiBackend
-from utils.callbacks import Callbacks
-from utils.dataloaders import create_dataloader
-from utils.general import (LOGGER, Profile, check_dataset, check_img_size, check_requirements, check_yaml,
-                           coco80_to_coco91_class, colorstr, increment_path, non_max_suppression, print_args,
-                           scale_coords, xywh2xyxy, xyxy2xywh)
-from utils.metrics import ConfusionMatrix, ap_per_class, box_iou
-from utils.plots import output_to_target, plot_images, plot_val_study
-from utils.torch_utils import select_device, smart_inference_mode
+from yolov5_models.common import DetectMultiBackend
+from yolov5_utils.callbacks import Callbacks
+from yolov5_utils.dataloaders import create_dataloader
+from yolov5_utils.general import (LOGGER, Profile, check_dataset, check_img_size, check_requirements, check_yaml,
+                                  coco80_to_coco91_class, colorstr, increment_path, non_max_suppression, print_args,
+                                  scale_coords, xywh2xyxy, xyxy2xywh)
+from yolov5_utils.metrics import ConfusionMatrix, ap_per_class, box_iou
+from yolov5_utils.plots import output_to_target, plot_images, plot_val_study
+from yolov5_utils.torch_utils import select_device, smart_inference_mode
 
 
 def save_one_txt(predn, save_conf, shape, file):
@@ -146,7 +146,7 @@ def run(
         else:
             device = model.device
             if not (pt or jit):
-                batch_size = 1  # export.py models default to batch-size 1
+                batch_size = 1  # export.py yolov5_models default to batch-size 1
                 LOGGER.info(f'Forcing --batch-size 1 square inference (1,3,{imgsz},{imgsz}) for non-PyTorch models')
 
         # Data

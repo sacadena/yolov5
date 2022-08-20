@@ -64,12 +64,12 @@ if str(ROOT) not in sys.path:
 if platform.system() != 'Windows':
     ROOT = Path(os.path.relpath(ROOT, Path.cwd()))  # relative
 
-from models.experimental import attempt_load
-from models.yolo import Detect
-from utils.dataloaders import LoadImages
-from utils.general import (LOGGER, check_dataset, check_img_size, check_requirements, check_version, check_yaml,
-                           colorstr, file_size, print_args, url2file)
-from utils.torch_utils import select_device, smart_inference_mode
+from yolov5_models.experimental import attempt_load
+from yolov5_models.yolo import Detect
+from yolov5_utils.dataloaders import LoadImages
+from yolov5_utils.general import (LOGGER, check_dataset, check_img_size, check_requirements, check_version, check_yaml,
+                                  colorstr, file_size, print_args, url2file)
+from yolov5_utils.torch_utils import select_device, smart_inference_mode
 
 
 def export_formats():
@@ -300,7 +300,7 @@ def export_saved_model(model,
         import tensorflow as tf
         from tensorflow.python.framework.convert_to_constants import convert_variables_to_constants_v2
 
-        from models.tf import TFDetect, TFModel
+        from yolov5_models.tf import TFDetect, TFModel
 
         LOGGER.info(f'\n{prefix} starting export with tensorflow {tf.__version__}...')
         f = str(file).replace('.pt', '_saved_model')
@@ -370,7 +370,7 @@ def export_tflite(keras_model, im, file, int8, data, nms, agnostic_nms, prefix=c
         converter.target_spec.supported_types = [tf.float16]
         converter.optimizations = [tf.lite.Optimize.DEFAULT]
         if int8:
-            from models.tf import representative_dataset_gen
+            from yolov5_models.tf import representative_dataset_gen
             dataset = LoadImages(check_dataset(check_yaml(data))['train'], img_size=imgsz, auto=False)
             converter.representative_dataset = lambda: representative_dataset_gen(dataset, ncalib=100)
             converter.target_spec.supported_ops = [tf.lite.OpsSet.TFLITE_BUILTINS_INT8]
@@ -539,7 +539,7 @@ def run(
     if any((saved_model, pb, tflite, edgetpu, tfjs)):
         if int8 or edgetpu:  # TFLite --int8 bug https://github.com/ultralytics/yolov5/issues/5707
             check_requirements(('flatbuffers==1.12',))  # required before `import tensorflow`
-        assert not tflite or not tfjs, 'TFLite and TF.js models must be exported separately, please pass only one type.'
+        assert not tflite or not tfjs, 'TFLite and TF.js yolov5_models must be exported separately, please pass only one type.'
         model, f[5] = export_saved_model(model.cpu(),
                                          im,
                                          file,

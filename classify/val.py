@@ -21,10 +21,10 @@ if str(ROOT) not in sys.path:
     sys.path.append(str(ROOT))  # add ROOT to PATH
 ROOT = Path(os.path.relpath(ROOT, Path.cwd()))  # relative
 
-from models.common import DetectMultiBackend
-from utils.dataloaders import create_classification_dataloader
-from utils.general import LOGGER, Profile, check_img_size, check_requirements, colorstr, increment_path, print_args
-from utils.torch_utils import select_device, smart_inference_mode
+from yolov5_models.common import DetectMultiBackend
+from yolov5_utils.dataloaders import create_classification_dataloader
+from yolov5_utils.general import LOGGER, Profile, check_img_size, check_requirements, colorstr, increment_path, print_args
+from yolov5_utils.torch_utils import select_device, smart_inference_mode
 
 
 @smart_inference_mode()
@@ -69,7 +69,7 @@ def run(
         else:
             device = model.device
             if not (pt or jit):
-                batch_size = 1  # export.py models default to batch-size 1
+                batch_size = 1  # export.py yolov5_models default to batch-size 1
                 LOGGER.info(f'Forcing --batch-size 1 square inference (1,3,{imgsz},{imgsz}) for non-PyTorch models')
 
         # Dataloader

@@ -37,24 +37,24 @@ if str(ROOT) not in sys.path:
 ROOT = Path(os.path.relpath(ROOT, Path.cwd()))  # relative
 
 import val as validate  # for end-of-epoch mAP
-from models.experimental import attempt_load
-from models.yolo import Model
-from utils.autoanchor import check_anchors
-from utils.autobatch import check_train_batch_size
-from utils.callbacks import Callbacks
-from utils.dataloaders import create_dataloader
-from utils.downloads import attempt_download, is_url
-from utils.general import (LOGGER, check_amp, check_dataset, check_file, check_git_status, check_img_size,
-                           check_requirements, check_suffix, check_yaml, colorstr, get_latest_run, increment_path,
-                           init_seeds, intersect_dicts, labels_to_class_weights, labels_to_image_weights, methods,
-                           one_cycle, print_args, print_mutation, strip_optimizer, yaml_save)
-from utils.loggers import Loggers
-from utils.loggers.wandb.wandb_utils import check_wandb_resume
-from utils.loss import ComputeLoss
-from utils.metrics import fitness
-from utils.plots import plot_evolve, plot_labels
-from utils.torch_utils import (EarlyStopping, ModelEMA, de_parallel, select_device, smart_DDP, smart_optimizer,
-                               smart_resume, torch_distributed_zero_first)
+from yolov5_models.experimental import attempt_load
+from yolov5_models.yolo import Model
+from yolov5_utils.autoanchor import check_anchors
+from yolov5_utils.autobatch import check_train_batch_size
+from yolov5_utils.callbacks import Callbacks
+from yolov5_utils.dataloaders import create_dataloader
+from yolov5_utils.downloads import attempt_download, is_url
+from yolov5_utils.general import (LOGGER, check_amp, check_dataset, check_file, check_git_status, check_img_size,
+                                  check_requirements, check_suffix, check_yaml, colorstr, get_latest_run, increment_path,
+                                  init_seeds, intersect_dicts, labels_to_class_weights, labels_to_image_weights, methods,
+                                  one_cycle, print_args, print_mutation, strip_optimizer, yaml_save)
+from yolov5_utils.loggers import Loggers
+from yolov5_utils.loggers.wandb.wandb_utils import check_wandb_resume
+from yolov5_utils.loss import ComputeLoss
+from yolov5_utils.metrics import fitness
+from yolov5_utils.plots import plot_evolve, plot_labels
+from yolov5_utils.torch_utils import (EarlyStopping, ModelEMA, de_parallel, select_device, smart_DDP, smart_optimizer,
+                                      smart_resume, torch_distributed_zero_first)
 
 LOCAL_RANK = int(os.getenv('LOCAL_RANK', -1))  # https://pytorch.org/docs/stable/elastic/run.html
 RANK = int(os.getenv('RANK', -1))
